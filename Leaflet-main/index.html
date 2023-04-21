@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Tutorial</title>
+    <!--CSS-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<!--style for page-->
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map{
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+</body>
+</html>
+<!--Leaflet JS-->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+<script>
+
+// Map inintialization
+
+var map = L.map('map').setView([38.4237, 27.1428], 13);
+
+//osm layer
+var osm =L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+
+osm.addTo(map);
+
+//tile statement terrain
+
+var stamenterrain = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 18,
+	ext: 'png'
+});
+
+stamenterrain.addTo(map);
+
+
+//darklabels tile
+var darklabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+});
+
+
+darklabels.addTo(map);
+
+//google street
+
+ var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+});
+googleStreets.addTo(map);
+
+// Marker
+var marker=L.marker([38.4237, 27.1428], {draggable: true});
+var popup= marker.bindPopup('This is Izmir from Turkey.' + marker.getLatLng()).openPopup()
+popup.addTo(map);
+
+// Layer controll
+var baseMaps = {
+    "OSM": osm,
+    "Stament terrain": stamenterrain,
+    'Dark Labels':darklabels,
+    'Google Street':googleStreets
+};
+
+var overlayMaps = {
+    "Marker": marker
+};
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+
+/* LEAFLET EVENT */
+ map.on('mouseover', function() {
+    console.log('your mouse is over the map')
+
+ }); 
+
+
+//map.on('mousemove', function(e){
+//console.log('lat: ' + e.latlng.lat, 'lng: ' + e.latlng.lng)
+//})
+
+</script>
